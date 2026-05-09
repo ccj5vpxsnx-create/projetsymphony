@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvel étudiant — Gestion Stages{% endblock %}
+
+{% block body %}
+
+{# ── Breadcrumb ── #}
+<ul class="breadcrumb">
+    <li><a href="#"><i class="fas fa-home"></i></a></li>
+    <li><span class="sep">/</span></li>
+    <li><a href="{{ path('app_etudiant_index') }}">Étudiants</a></li>
+    <li><span class="sep">/</span></li>
+    <li>Nouveau</li>
+</ul>
+
+{# ── Page header ── #}
+<div class="page-header">
+    <h1>
+        <span>Formulaire</span>
+        Nouvel étudiant
+    </h1>
+    <a href="{{ path('app_etudiant_index') }}" class="btn btn-outline">
+        <i class="fas fa-arrow-left"></i> Retour à la liste
+    </a>
+</div>
+
+{# ── Form card ── #}
+<div style="max-width:620px">
+    <div class="card card-body">
+        {{ include('etudiant/_form.html.twig') }}
+    </div>
+</div>
+
+{% endblock %}

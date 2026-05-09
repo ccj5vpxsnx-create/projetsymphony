@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block title %}Modifier Enseignant{% endblock %}
+{% block body %}
+<div class="card p-4">
+    <h1><i class="fas fa-edit"></i> Modifier Enseignant</h1>
+    {{ include('enseignant/_form.html.twig', {'button_label': 'Modifier'}) }}
+    {{ include('enseignant/_delete_form.html.twig') }}
+    <a href="{{ path('app_enseignant_index') }}" class="btn btn-secondary mt-3">
+        <i class="fas fa-arrow-left"></i> Retour
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste Enseignants{% endblock %}
+
+{% block body %}
+<div class="card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-chalkboard-teacher"></i> Liste des Enseignants</h1>
+        <a href="{{ path('app_enseignant_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Ajouter
+        </a>
+    </div>
+    <table class="table table-hover table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Matricule</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enseignant in enseignants %}
+            <tr>
+                <td>{{ enseignant.id }}</td>
+                <td>{{ enseignant.matricule }}</td>
+                <td>{{ enseignant.nom }}</td>
+                <td>{{ enseignant.prenom }}</td>
+                <td>
+                    <a href="{{ path('app_enseignant_show', {'id': enseignant.id}) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                    <a href="{{ path('app_enseignant_edit', {'id': enseignant.id}) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" class="text-center">Aucun enseignant</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

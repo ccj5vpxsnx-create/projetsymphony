@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ etudiant.nom }} {{ etudiant.prenom }} — Gestion Stages{% endblock %}
+
+{% block body %}
+
+{# ── Breadcrumb ── #}
+<ul class="breadcrumb">
+    <li><a href="#"><i class="fas fa-home"></i></a></li>
+    <li><span class="sep">/</span></li>
+    <li><a href="{{ path('app_etudiant_index') }}">Étudiants</a></li>
+    <li><span class="sep">/</span></li>
+    <li>{{ etudiant.nom }} {{ etudiant.prenom }}</li>
+</ul>
+
+{# ── Page header ── #}
+<div class="page-header">
+    <h1>
+        <span>Fiche étudiant</span>
+        {{ etudiant.nom }} {{ etudiant.prenom }}
+    </h1>
+    <div style="display:flex;gap:.6rem">
+        <a href="{{ path('app_etudiant_edit', {'id': etudiant.id}) }}" class="btn btn-outline">
+            <i class="fas fa-pen"></i> Modifier
+        </a>
+        <a href="{{ path('app_etudiant_index') }}" class="btn btn-outline">
+            <i class="fas fa-arrow-left"></i> Retour
+        </a>
+    </div>
+</div>
+
+{# ── Detail card ── #}
+<div style="display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start">
+
+    <div class="card">
+        <div style="padding:1.5rem 1.5rem .5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.75rem">
+            <div style="width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem">
+                {{ etudiant.nom|first|upper }}
+            </div>
+            <div>
+                <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem">{{ etudiant.nom }} {{ etudiant.prenom }}</div>
+                <div style="font-size:.78rem;color:var(--muted)">Étudiant · ID #{{ etudiant.id }}</div>
+            </div>
+        </div>
+
+        <table class="detail-table">
+            <tr>
+                <th>ID</th>
+                <td>
+                    <span class="badge-chip"># {{ etudiant.id }}</span>
+                </td>
+            </tr>
+            <tr>
+                <th>NCE</th>
+                <td>
+                    <span class="badge-chip"><i class="fas fa-hashtag" style="font-size:.65rem"></i> {{ etudiant.nce }}</span>
+                </td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td style="font-weight:600">{{ etudiant.nom }}</td>
+            </tr>
+            <tr>
+                <th>Prénom</th>
+                <td>{{ etudiant.prenom }}</td>
+            </tr>
+        </table>
+    </div>
+
+    {# ── Side panel: actions ── #}
+    <div style="display:flex;flex-direction:column;gap:1rem">
+        <div class="card card-body" style="padding:1.25rem">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem">Actions</div>
+            <div style="display:flex;flex-direction:column;gap:.5rem">
+                <a href="{{ path('app_etudiant_edit', {'id': etudiant.id}) }}" class="btn btn-primary" style="justify-content:center">
+                    <i class="fas fa-pen"></i> Modifier la fiche
+                </a>
+                <a href="{{ path('app_etudiant_index') }}" class="btn btn-outline" style="justify-content:center">
+                    <i class="fas fa-list"></i> Voir la liste
+                </a>
+            </div>
+        </div>
+
+        {# Delete zone #}
+        <div class="card card-body" style="padding:1.25rem;border-color:#fecaca">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#c0392b;margin-bottom:.75rem">Zone dangereuse</div>
+            {{ include('etudiant/_delete_form.html.twig') }}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

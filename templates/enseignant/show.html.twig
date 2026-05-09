@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block title %}Détail Enseignant{% endblock %}
+{% block body %}
+<div class="card p-4">
+    <h1><i class="fas fa-user"></i> Détail Enseignant</h1>
+    <table class="table table-bordered mt-3">
+        <tbody>
+            <tr>
+                <th class="table-dark">ID</th>
+                <td>{{ enseignant.id }}</td>
+            </tr>
+            <tr>
+                <th class="table-dark">Matricule</th>
+                <td>{{ enseignant.matricule }}</td>
+            </tr>
+            <tr>
+                <th class="table-dark">Nom</th>
+                <td>{{ enseignant.nom }}</td>
+            </tr>
+            <tr>
+                <th class="table-dark">Prénom</th>
+                <td>{{ enseignant.prenom }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="mt-3">
+        <a href="{{ path('app_enseignant_index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retour
+        </a>
+        <a href="{{ path('app_enseignant_edit', {'id': enseignant.id}) }}" class="btn btn-warning">
+            <i class="fas fa-edit"></i> Modifier
+        </a>
+        {{ include('enseignant/_delete_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

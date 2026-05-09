@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier {{ etudiant.nom }} — Gestion Stages{% endblock %}
+
+{% block body %}
+
+{# ── Breadcrumb ── #}
+<ul class="breadcrumb">
+    <li><a href="#"><i class="fas fa-home"></i></a></li>
+    <li><span class="sep">/</span></li>
+    <li><a href="{{ path('app_etudiant_index') }}">Étudiants</a></li>
+    <li><span class="sep">/</span></li>
+    <li><a href="{{ path('app_etudiant_show', {'id': etudiant.id}) }}">{{ etudiant.nom }}</a></li>
+    <li><span class="sep">/</span></li>
+    <li>Modifier</li>
+</ul>
+
+{# ── Page header ── #}
+<div class="page-header">
+    <h1>
+        <span>Édition</span>
+        {{ etudiant.nom }} {{ etudiant.prenom }}
+    </h1>
+    <div style="display:flex;gap:.6rem">
+        <a href="{{ path('app_etudiant_show', {'id': etudiant.id}) }}" class="btn btn-outline">
+            <i class="fas fa-eye"></i> Voir la fiche
+        </a>
+        <a href="{{ path('app_etudiant_index') }}" class="btn btn-outline">
+            <i class="fas fa-arrow-left"></i> Retour
+        </a>
+    </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 300px;gap:1.5rem;align-items:start">
+
+    {# ── Edit form ── #}
+    <div class="card card-body">
+        {{ include('etudiant/_form.html.twig', {'button_label': 'Enregistrer les modifications'}) }}
+    </div>
+
+    {# ── Side: delete ── #}
+    <div style="display:flex;flex-direction:column;gap:1rem">
+        <div class="card card-body" style="border-color:#fecaca;padding:1.25rem">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#c0392b;margin-bottom:.5rem">Supprimer</div>
+            <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem">Cette action est irréversible. Toutes les données associées seront supprimées.</p>
+            {{ include('etudiant/_delete_form.html.twig') }}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
