@@ -20,6 +20,14 @@ class Soutenance
     #[ORM\Column]
     private ?float $note = null;
 
+    #[ORM\ManyToOne(targetEntity: Enseignant::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Enseignant $enseignant = null;
+
+    #[ORM\ManyToOne(targetEntity: Etudiant::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Etudiant $etudiant = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -33,7 +41,6 @@ class Soutenance
     public function setDateSoutenance(\DateTime $dateSoutenance): static
     {
         $this->dateSoutenance = $dateSoutenance;
-
         return $this;
     }
 
@@ -45,7 +52,28 @@ class Soutenance
     public function setNote(float $note): static
     {
         $this->note = $note;
+        return $this;
+    }
 
+    public function getEnseignant(): ?Enseignant
+    {
+        return $this->enseignant;
+    }
+
+    public function setEnseignant(?Enseignant $enseignant): static
+    {
+        $this->enseignant = $enseignant;
+        return $this;
+    }
+
+    public function getEtudiant(): ?Etudiant
+    {
+        return $this->etudiant;
+    }
+
+    public function setEtudiant(?Etudiant $etudiant): static
+    {
+        $this->etudiant = $etudiant;
         return $this;
     }
 }

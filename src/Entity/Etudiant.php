@@ -35,7 +35,6 @@ class Etudiant
     public function setNce(string $nce): static
     {
         $this->nce = $nce;
-
         return $this;
     }
 
@@ -47,7 +46,6 @@ class Etudiant
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -59,7 +57,11 @@ class Etudiant
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
-
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->nom . ' ' . $this->prenom;
     }
 }

@@ -35,7 +35,6 @@ class Enseignant
     public function setMatricule(int $matricule): static
     {
         $this->matricule = $matricule;
-
         return $this;
     }
 
@@ -47,7 +46,6 @@ class Enseignant
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -59,7 +57,11 @@ class Enseignant
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
-
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->nom . ' ' . $this->prenom;
     }
 }

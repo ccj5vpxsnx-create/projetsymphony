@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Soutenance index{% endblock %}
+
+{% block body %}
+    <h1>Soutenance index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DateSoutenance</th>
+                <th>Note</th>
+                <th>Enseignant</th>
+                <th>Etudiant</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for soutenance in soutenances %}
+            <tr>
+                <td>{{ soutenance.id }}</td>
+                <td>{{ soutenance.dateSoutenance ? soutenance.dateSoutenance|date('Y-m-d') : '' }}</td>
+                <td>{{ soutenance.note }}</td>
+                <td>{{ soutenance.enseignant ? soutenance.enseignant.nom ~ ' ' ~ soutenance.enseignant.prenom : '-' }}</td>
+                <td>{{ soutenance.etudiant ? soutenance.etudiant.nom ~ ' ' ~ soutenance.etudiant.prenom : '-' }}</td>
+                <td>
+                    <a href="{{ path('app_soutenance_show', {'id': soutenance.id}) }}">show</a>
+                    <a href="{{ path('app_soutenance_edit', {'id': soutenance.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_soutenance_new') }}">Create new</a>
+{% endblock %}
