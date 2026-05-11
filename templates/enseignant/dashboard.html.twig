@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Enseignant{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Bienvenue, {{ enseignant.prenom }} {{ enseignant.nom }}</h2>
+    <hr>
+    <h4>Mes Soutenances</h4>
+
+    {% if soutenances is empty %}
+        <div class="alert alert-info">Aucune soutenance assignée pour le moment.</div>
+    {% else %}
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Etudiant</th>
+                    <th>Date</th>
+                    <th>Note</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for soutenance in soutenances %}
+                <tr>
+                    <td>{{ soutenance.etudiant }}</td>
+                    <td>{{ soutenance.dateSoutenance|date('d/m/Y') }}</td>
+                    <td>
+                        {% if soutenance.note is not null %}
+                            {{ soutenance.note }}/20
+                        {% else %}
+                            <span class="badge bg-warning">Non noté</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="post" action="{{ path('noter_etudiant', {id: soutenance.id}) }}" class="d-flex gap-2">
+                            <input type="hidden" name="_token" value="{{ csrf_token('noter') }}">
+                            <input type="number" name="note" min="0" max="20" step="0.5"
+                                   class="form-control form-control-sm" style="width: 80px"
+                                   value="{{ soutenance.note }}">
+                            <button type="submit" class="btn btn-sm btn-success">Enregistrer</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+{% endblock %}

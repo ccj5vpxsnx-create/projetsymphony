@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/soutenance')]
+#[Route('/admin/soutenance')]
 final class SoutenanceController extends AbstractController
 {
     #[Route(name: 'app_soutenance_index', methods: ['GET'])]

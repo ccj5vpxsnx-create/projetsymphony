@@ -20,9 +20,31 @@
                 <i class="fas fa-graduation-cap"></i> Gestion Stages
             </a>
             <div class="navbar-nav ms-auto">
-                <a class="nav-link text-white" href="/enseignant"><i class="fas fa-chalkboard-teacher"></i> Enseignants</a>
-                <a class="nav-link text-white" href="/etudiant"><i class="fas fa-user-graduate"></i> Etudiants</a>
-                <a class="nav-link text-white" href="/soutenance"><i class="fas fa-calendar"></i> Soutenances</a>
+
+                {# Liens visibles uniquement pour l'admin #}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="nav-link text-white" href="/admin/enseignant"><i class="fas fa-chalkboard-teacher"></i> Enseignants</a>
+                    <a class="nav-link text-white" href="/admin/etudiant"><i class="fas fa-user-graduate"></i> Etudiants</a>
+                    <a class="nav-link text-white" href="/admin/soutenance"><i class="fas fa-calendar"></i> Soutenances</a>
+                {% endif %}
+
+                {# Lien dashboard enseignant #}
+                {% if is_granted('ROLE_ENSEIGNANT') %}
+                    <a class="nav-link text-white" href="/dashboard/enseignant"><i class="fas fa-chalkboard-teacher"></i> Mon Dashboard</a>
+                {% endif %}
+
+                {# Lien dashboard étudiant #}
+                {% if is_granted('ROLE_ETUDIANT') %}
+                    <a class="nav-link text-white" href="/dashboard/etudiant"><i class="fas fa-user-graduate"></i> Mon Dashboard</a>
+                {% endif %}
+
+                {# Logout si connecté #}
+                {% if app.user %}
+                    <a class="nav-link text-white" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                {% else %}
+                    <a class="nav-link text-white" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+                {% endif %}
+
             </div>
         </div>
     </nav>

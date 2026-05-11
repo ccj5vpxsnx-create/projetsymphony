@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block body %}
+<div class="row mt-4">
+    <div class="col-12">
+        <h1><i class="fas fa-tachometer-alt"></i> Dashboard Admin</h1>
+        <hr>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-4">
+            <i class="fas fa-chalkboard-teacher fa-3x text-purple mb-3"></i>
+            <h4>Enseignants</h4>
+            <a href="/admin/enseignant" class="btn btn-primary mt-2">Gérer</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-4">
+            <i class="fas fa-user-graduate fa-3x text-purple mb-3"></i>
+            <h4>Etudiants</h4>
+            <a href="/admin/etudiant" class="btn btn-primary mt-2">Gérer</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-4">
+            <i class="fas fa-calendar fa-3x text-purple mb-3"></i>
+            <h4>Soutenances</h4>
+            <a href="/admin/soutenance" class="btn btn-primary mt-2">Gérer</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

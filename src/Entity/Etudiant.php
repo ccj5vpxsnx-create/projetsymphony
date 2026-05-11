@@ -22,6 +22,10 @@ class Etudiant
     #[ORM\Column(length: 100)]
     private ?string $prenom = null;
 
+    #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -57,6 +61,17 @@ class Etudiant
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
         return $this;
     }
 

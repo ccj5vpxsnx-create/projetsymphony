@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Etudiant{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Bienvenue, {{ etudiant.prenom }} {{ etudiant.nom }}</h2>
+    <hr>
+    <h4>Ma Soutenance</h4>
+
+    {% if soutenance is null %}
+        <div class="alert alert-info">Aucune soutenance planifiée pour le moment.</div>
+    {% else %}
+        <div class="card shadow" style="max-width: 500px;">
+            <div class="card-body">
+                <p><strong>Date :</strong> {{ soutenance.dateSoutenance|date('d/m/Y') }}</p>
+                <p><strong>Enseignant :</strong> {{ soutenance.enseignant }}</p>
+                <p>
+                    <strong>Note :</strong>
+                    {% if soutenance.note is not null %}
+                        <span class="badge bg-success fs-6">{{ soutenance.note }}/20</span>
+                    {% else %}
+                        <span class="badge bg-warning">En attente</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
