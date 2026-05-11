@@ -27,6 +27,8 @@ class Soutenance
     #[ORM\ManyToOne(targetEntity: Etudiant::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Etudiant $etudiant = null;
+#[ORM\Column(length: 50)]
+private ?string $etat = 'a_venir';
 
     public function getId(): ?int
     {
@@ -74,6 +76,18 @@ class Soutenance
     public function setEtudiant(?Etudiant $etudiant): static
     {
         $this->etudiant = $etudiant;
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?string $etat): static
+    {
+        $this->etat = $etat;
+
         return $this;
     }
 }

@@ -6,6 +6,14 @@
 <div class="container mt-5">
     <h2>Bienvenue, {{ enseignant.prenom }} {{ enseignant.nom }}</h2>
     <hr>
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
     <h4>Mes Soutenances</h4>
 
     {% if soutenances is empty %}
@@ -16,6 +24,7 @@
                 <tr>
                     <th>Etudiant</th>
                     <th>Date</th>
+                    <th>État</th>
                     <th>Note</th>
                     <th>Action</th>
                 </tr>
@@ -26,20 +35,34 @@
                     <td>{{ soutenance.etudiant }}</td>
                     <td>{{ soutenance.dateSoutenance|date('d/m/Y') }}</td>
                     <td>
-                        {% if soutenance.note is not null %}
+                        {% if soutenance.etat == 'a_venir' %}
+                            <span class="badge bg-info">À venir</span>
+                        {% elseif soutenance.etat == 'notee' %}
+                            <span class="badge bg-success">Notée</span>
+                        {% else %}
+                            <span class="badge bg-secondary">-</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if soutenance.note is not null and soutenance.note > 0 %}
                             {{ soutenance.note }}/20
                         {% else %}
                             <span class="badge bg-warning">Non noté</span>
                         {% endif %}
                     </td>
                     <td>
-                        <form method="post" action="{{ path('noter_etudiant', {id: soutenance.id}) }}" class="d-flex gap-2">
-                            <input type="hidden" name="_token" value="{{ csrf_token('noter') }}">
-                            <input type="number" name="note" min="0" max="20" step="0.5"
-                                   class="form-control form-control-sm" style="width: 80px"
-                                   value="{{ soutenance.note }}">
-                            <button type="submit" class="btn btn-sm btn-success">Enregistrer</button>
-                        </form>
+                        {% if soutenance.dateSoutenance < date() and soutenance.etat != 'notee' %}
+                            <form method="post" action="{{ path('noter_etudiant', {id: soutenance.id}) }}" class="d-flex gap-2">
+                                <input type="hidden" name="_token" value="{{ csrf_token('noter') }}">
+                                <input type="number" name="note" min="0" max="20" step="0.5"
+                                       class="form-control form-control-sm" style="width: 80px" required>
+                                <button type="submit" class="btn btn-sm btn-success">Enregistrer</button>
+                            </form>
+                        {% elseif soutenance.etat == 'notee' %}
+                            <span class="badge bg-success">✓ Notée</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Date pas encore passée</span>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
