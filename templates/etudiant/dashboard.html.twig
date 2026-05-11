@@ -1,52 +1,74 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dashboard Etudiant{% endblock %}
+{% block title %}Mon tableau de bord — Gestion Stages{% endblock %}
+
+{% block breadcrumb %}
+    <li><span class="sep">/</span></li>
+    <li>Mon tableau de bord</li>
+{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <h2>Bienvenue, {{ etudiant.prenom }} {{ etudiant.nom }}</h2>
-    <hr>
-    <h4>Mes Soutenances</h4>
+
+<div class="page-header">
+    <div class="page-title">
+        <em>bienvenue,</em>
+        {{ etudiant.prenom }} {{ etudiant.nom }}
+    </div>
+</div>
+
+{# ── Soutenances ── #}
+<div style="margin-bottom:1rem">
+    <div style="font-size:.63rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600;margin-bottom:.85rem">
+        <i class="fas fa-calendar-check" style="margin-right:.4rem"></i>Mes Soutenances
+    </div>
 
     {% if soutenances is empty %}
-        <div class="alert alert-info">Aucune soutenance planifiée pour le moment.</div>
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle" style="margin-right:.5rem"></i>
+            Aucune soutenance planifiée pour le moment.
+        </div>
     {% else %}
-        <table class="table table-bordered table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>Date</th>
-                    <th>Enseignant</th>
-                    <th>État</th>
-                    <th>Note</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for soutenance in soutenances %}
-                <tr>
-                    <td>{{ soutenance.dateSoutenance|date('d/m/Y') }}</td>
-                    <td>{{ soutenance.enseignant }}</td>
-                    <td>
-                        {% if soutenance.etat == 'a_venir' %}
-                            <span class="badge bg-info">À venir</span>
-                        {% elseif soutenance.etat == 'passee' %}
-                            <span class="badge bg-warning">Passée</span>
-                        {% elseif soutenance.etat == 'notee' %}
-                            <span class="badge bg-success">Notée</span>
-                        {% else %}
-                            <span class="badge bg-secondary">-</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if soutenance.etat == 'notee' %}
-                            <span class="badge bg-success fs-6">{{ soutenance.note }}/20</span>
-                        {% else %}
-                            <span class="badge bg-warning">En attente</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="card">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-calendar" style="margin-right:.35rem;opacity:.5"></i>Date</th>
+                        <th><i class="fas fa-chalkboard-teacher" style="margin-right:.35rem;opacity:.5"></i>Enseignant</th>
+                        <th>État</th>
+                        <th>Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for soutenance in soutenances %}
+                    <tr>
+                        <td style="font-weight:500">{{ soutenance.dateSoutenance|date('d/m/Y') }}</td>
+                        <td style="color:var(--muted)">{{ soutenance.enseignant }}</td>
+                        <td>
+                            {% if soutenance.etat == 'a_venir' %}
+                                <span class="badge badge-avenir"><i class="fas fa-clock" style="margin-right:.3rem"></i>À venir</span>
+                            {% elseif soutenance.etat == 'passee' %}
+                                <span class="badge badge-passee"><i class="fas fa-check" style="margin-right:.3rem"></i>Passée</span>
+                            {% elseif soutenance.etat == 'notee' %}
+                                <span class="badge badge-notee"><i class="fas fa-star" style="margin-right:.3rem"></i>Notée</span>
+                            {% else %}
+                                <span class="badge badge-default">—</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if soutenance.etat == 'notee' %}
+                                <span class="badge badge-notee" style="font-size:.78rem;padding:.25rem .65rem">
+                                    {{ soutenance.note }}/20
+                                </span>
+                            {% else %}
+                                <span class="badge badge-default">En attente</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% endif %}
 </div>
+
 {% endblock %}

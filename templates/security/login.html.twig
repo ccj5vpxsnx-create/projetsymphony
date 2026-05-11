@@ -1,34 +1,150 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion — Gestion Stages</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --sky-50:#f0f9ff; --sky-100:#e0f2fe; --sky-200:#bae6fd;
+            --sky-300:#7dd3fc; --sky-400:#38bdf8; --sky-500:#0ea5e9;
+            --sky-600:#0284c7; --sky-700:#0369a1; --sky-800:#075985;
+            --ink:#0c4a6e; --muted:#4a7fa0; --border:#bae6fd;
+            --white:#ffffff; --danger:#991b1b; --danger-bg:#fee2e2;
+            --radius:10px; --radius-lg:14px;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--sky-100);
+            color: var(--ink);
+        }
+        .auth-card {
+            width: 420px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        .auth-header {
+            background: var(--sky-500);
+            padding: 2rem;
+            text-align: center;
+        }
+        .auth-logo {
+            font-family: 'Lora', serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: .3rem;
+        }
+        .auth-sub { font-size: .72rem; color: rgba(255,255,255,.75); letter-spacing: .06em; }
+        .auth-body { padding: 1.85rem; }
+        .form-group { margin-bottom: 1.1rem; }
+        .form-label { display: block; font-size: .75rem; font-weight: 500; color: var(--ink); margin-bottom: .32rem; }
+        .form-control {
+            width: 100%; padding: .55rem .9rem;
+            border: 1px solid var(--border); border-radius: var(--radius);
+            font-size: .84rem; font-family: inherit; color: var(--ink);
+            background: var(--white); transition: border-color .15s;
+        }
+        .form-control:focus { outline: none; border-color: var(--sky-400); box-shadow: 0 0 0 3px rgba(14,165,233,.12); }
+        .btn-submit {
+            width: 100%; padding: .6rem 1rem;
+            background: var(--sky-500); color: #fff;
+            border: none; border-radius: var(--radius);
+            font-size: .85rem; font-weight: 500;
+            font-family: inherit; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: .4rem;
+            transition: background .15s; margin-top: .5rem;
+        }
+        .btn-submit:hover { background: var(--sky-600); }
+        .alert-danger {
+            background: var(--danger-bg); color: var(--danger);
+            padding: .75rem 1rem; border-radius: var(--radius);
+            font-size: .8rem; margin-bottom: 1rem;
+            border: 1px solid #fecaca;
+        }
+        .remember-label {
+            display: flex; align-items: center; gap: .4rem;
+            font-size: .78rem; color: var(--muted); cursor: pointer;
+            margin-top: .75rem;
+        }
+        .auth-footer {
+            padding: .95rem 1.85rem;
+            background: var(--sky-50);
+            text-align: center;
+            font-size: .77rem;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+        }
+        .auth-footer a { color: var(--sky-600); text-decoration: none; font-weight: 500; }
+        .auth-footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
 
-{% block title %}Log in!{% endblock %}
-
-{% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
-        </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
-
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
+<div class="auth-card">
+    <div class="auth-header">
+        <div class="auth-logo">Gestion Stages</div>
+        <div class="auth-sub">Accès sécurisé à votre espace</div>
     </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
-{% endblock %}
+    <div class="auth-body">
+        {% if error %}
+            <div class="alert-danger">
+                <i class="fas fa-exclamation-circle" style="margin-right:.4rem"></i>
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        {% if app.user %}
+            <div style="text-align:center;font-size:.83rem;color:var(--muted);margin-bottom:1rem">
+                Connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>.
+                <a href="{{ logout_path() }}" style="color:var(--sky-600)">Se déconnecter</a>
+            </div>
+        {% endif %}
+
+        <form method="post">
+            <div class="form-group">
+                <label class="form-label" for="inputEmail">
+                    <i class="fas fa-envelope" style="margin-right:.35rem;opacity:.6"></i>Adresse email
+                </label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
+                       class="form-control" autocomplete="email" required autofocus
+                       placeholder="votre@email.tn">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="inputPassword">
+                    <i class="fas fa-lock" style="margin-right:.35rem;opacity:.6"></i>Mot de passe
+                </label>
+                <input type="password" name="password" id="inputPassword"
+                       class="form-control" autocomplete="current-password" required
+                       placeholder="••••••••">
+            </div>
+
+            <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+            <label class="remember-label">
+                <input type="checkbox" name="_remember_me"> Se souvenir de moi
+            </label>
+
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-sign-in-alt"></i> Se connecter
+            </button>
+        </form>
+    </div>
+
+    <div class="auth-footer">
+        Pas encore de compte ? <a href="{{ path('app_register') }}">S'inscrire</a>
+    </div>
+</div>
+
+</body>
+</html>

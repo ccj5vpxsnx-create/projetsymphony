@@ -1,73 +1,74 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dashboard Enseignant{% endblock %}
+{% block title %}Mon tableau de bord — Gestion Stages{% endblock %}
+
+{% block breadcrumb %}
+    <li><span class="sep">/</span></li>
+    <li>Mon tableau de bord</li>
+{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <h2>Bienvenue, {{ enseignant.prenom }} {{ enseignant.nom }}</h2>
-    <hr>
 
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">{{ message }}</div>
-    {% endfor %}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
+<div class="page-header">
+    <div class="page-title">
+        <em>bienvenue,</em>
+        {{ enseignant.prenom }} {{ enseignant.nom }}
+    </div>
+</div>
 
-    <h4>Mes Soutenances</h4>
+{# ── Soutenances ── #}
+<div style="margin-bottom:1rem">
+    <div style="font-size:.63rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600;margin-bottom:.85rem">
+        <i class="fas fa-calendar-check" style="margin-right:.4rem"></i>Mes Soutenances
+    </div>
 
     {% if soutenances is empty %}
-        <div class="alert alert-info">Aucune soutenance assignée pour le moment.</div>
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle" style="margin-right:.5rem"></i>
+            Aucune soutenance planifiée pour le moment.
+        </div>
     {% else %}
-        <table class="table table-bordered table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>Etudiant</th>
-                    <th>Date</th>
-                    <th>État</th>
-                    <th>Note</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for soutenance in soutenances %}
-                <tr>
-                    <td>{{ soutenance.etudiant }}</td>
-                    <td>{{ soutenance.dateSoutenance|date('d/m/Y') }}</td>
-                    <td>
-                        {% if soutenance.etat == 'a_venir' %}
-                            <span class="badge bg-info">À venir</span>
-                        {% elseif soutenance.etat == 'notee' %}
-                            <span class="badge bg-success">Notée</span>
-                        {% else %}
-                            <span class="badge bg-secondary">-</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if soutenance.note is not null and soutenance.note > 0 %}
-                            {{ soutenance.note }}/20
-                        {% else %}
-                            <span class="badge bg-warning">Non noté</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if soutenance.dateSoutenance < date() and soutenance.etat != 'notee' %}
-                            <form method="post" action="{{ path('noter_etudiant', {id: soutenance.id}) }}" class="d-flex gap-2">
-                                <input type="hidden" name="_token" value="{{ csrf_token('noter') }}">
-                                <input type="number" name="note" min="0" max="20" step="0.5"
-                                       class="form-control form-control-sm" style="width: 80px" required>
-                                <button type="submit" class="btn btn-sm btn-success">Enregistrer</button>
-                            </form>
-                        {% elseif soutenance.etat == 'notee' %}
-                            <span class="badge bg-success">✓ Notée</span>
-                        {% else %}
-                            <span class="badge bg-secondary">Date pas encore passée</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="card">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-calendar" style="margin-right:.35rem;opacity:.5"></i>Date</th>
+                        <th><i class="fas fa-chalkboard-teacher" style="margin-right:.35rem;opacity:.5"></i>Enseignant</th>
+                        <th>État</th>
+                        <th>Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for soutenance in soutenances %}
+                    <tr>
+                        <td style="font-weight:500">{{ soutenance.dateSoutenance|date('d/m/Y') }}</td>
+                        <td style="color:var(--muted)">{{ soutenance.enseignant }}</td>
+                        <td>
+                            {% if soutenance.etat == 'a_venir' %}
+                                <span class="badge badge-avenir"><i class="fas fa-clock" style="margin-right:.3rem"></i>À venir</span>
+                            {% elseif soutenance.etat == 'passee' %}
+                                <span class="badge badge-passee"><i class="fas fa-check" style="margin-right:.3rem"></i>Passée</span>
+                            {% elseif soutenance.etat == 'notee' %}
+                                <span class="badge badge-notee"><i class="fas fa-star" style="margin-right:.3rem"></i>Notée</span>
+                            {% else %}
+                                <span class="badge badge-default">—</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if soutenance.etat == 'notee' %}
+                                <span class="badge badge-notee" style="font-size:.78rem;padding:.25rem .65rem">
+                                    {{ soutenance.note }}/20
+                                </span>
+                            {% else %}
+                                <span class="badge badge-default">En attente</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% endif %}
 </div>
+
 {% endblock %}

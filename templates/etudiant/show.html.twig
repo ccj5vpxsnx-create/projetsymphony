@@ -2,75 +2,70 @@
 
 {% block title %}{{ etudiant.nom }} {{ etudiant.prenom }} — Gestion Stages{% endblock %}
 
-{% block body %}
-
-{# ── Breadcrumb ── #}
-<ul class="breadcrumb">
-    <li><a href="#"><i class="fas fa-home"></i></a></li>
+{% block breadcrumb %}
     <li><span class="sep">/</span></li>
     <li><a href="{{ path('app_etudiant_index') }}">Étudiants</a></li>
     <li><span class="sep">/</span></li>
     <li>{{ etudiant.nom }} {{ etudiant.prenom }}</li>
-</ul>
+{% endblock %}
 
-{# ── Page header ── #}
+{% block topbar_actions %}
+    <a href="{{ path('app_etudiant_edit', {'id': etudiant.id}) }}" class="btn btn-outline btn-sm">
+        <i class="fas fa-pen"></i> Modifier
+    </a>
+    <a href="{{ path('app_etudiant_index') }}" class="btn btn-outline btn-sm">
+        <i class="fas fa-arrow-left"></i> Retour
+    </a>
+{% endblock %}
+
+{% block body %}
+
 <div class="page-header">
-    <h1>
-        <span>Fiche étudiant</span>
+    <div class="page-title">
+        <em>fiche étudiant</em>
         {{ etudiant.nom }} {{ etudiant.prenom }}
-    </h1>
-    <div style="display:flex;gap:.6rem">
-        <a href="{{ path('app_etudiant_edit', {'id': etudiant.id}) }}" class="btn btn-outline">
-            <i class="fas fa-pen"></i> Modifier
-        </a>
-        <a href="{{ path('app_etudiant_index') }}" class="btn btn-outline">
-            <i class="fas fa-arrow-left"></i> Retour
-        </a>
     </div>
 </div>
 
-{# ── Detail card ── #}
-<div style="display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start">
+<div style="display:grid;grid-template-columns:1fr 300px;gap:1.5rem;align-items:start">
 
+    {# ── Detail card ── #}
     <div class="card">
-        <div style="padding:1.5rem 1.5rem .5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.75rem">
-            <div style="width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem">
+        <div style="padding:1.25rem 1.5rem .85rem;border-bottom:1px solid var(--sky-100);display:flex;align-items:center;gap:.85rem">
+            <div style="width:46px;height:46px;border-radius:50%;background:var(--sky-500);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-weight:600;font-size:1.15rem;flex-shrink:0">
                 {{ etudiant.nom|first|upper }}
             </div>
             <div>
-                <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem">{{ etudiant.nom }} {{ etudiant.prenom }}</div>
-                <div style="font-size:.78rem;color:var(--muted)">Étudiant · ID #{{ etudiant.id }}</div>
+                <div style="font-weight:600;font-size:1rem">{{ etudiant.nom }} {{ etudiant.prenom }}</div>
+                <div style="font-size:.73rem;color:var(--muted)">Étudiant · ID #{{ etudiant.id }}</div>
             </div>
         </div>
 
         <table class="detail-table">
             <tr>
-                <th>ID</th>
-                <td>
-                    <span class="badge-chip"># {{ etudiant.id }}</span>
-                </td>
+                <th><i class="fas fa-hashtag" style="margin-right:.4rem;opacity:.5"></i>ID</th>
+                <td><span class="badge-chip"># {{ etudiant.id }}</span></td>
             </tr>
             <tr>
-                <th>NCE</th>
-                <td>
-                    <span class="badge-chip"><i class="fas fa-hashtag" style="font-size:.65rem"></i> {{ etudiant.nce }}</span>
-                </td>
+                <th><i class="fas fa-id-card" style="margin-right:.4rem;opacity:.5"></i>NCE</th>
+                <td><span class="badge-chip"><i class="fas fa-hashtag" style="font-size:.6rem"></i> {{ etudiant.nce }}</span></td>
             </tr>
             <tr>
-                <th>Nom</th>
+                <th><i class="fas fa-user" style="margin-right:.4rem;opacity:.5"></i>Nom</th>
                 <td style="font-weight:600">{{ etudiant.nom }}</td>
             </tr>
             <tr>
-                <th>Prénom</th>
+                <th><i class="fas fa-user" style="margin-right:.4rem;opacity:.5"></i>Prénom</th>
                 <td>{{ etudiant.prenom }}</td>
             </tr>
         </table>
     </div>
 
-    {# ── Side panel: actions ── #}
+    {# ── Side panel ── #}
     <div style="display:flex;flex-direction:column;gap:1rem">
-        <div class="card card-body" style="padding:1.25rem">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem">Actions</div>
+
+        <div class="card card-body">
+            <div style="font-size:.63rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600;margin-bottom:.85rem">Actions</div>
             <div style="display:flex;flex-direction:column;gap:.5rem">
                 <a href="{{ path('app_etudiant_edit', {'id': etudiant.id}) }}" class="btn btn-primary" style="justify-content:center">
                     <i class="fas fa-pen"></i> Modifier la fiche
@@ -81,13 +76,13 @@
             </div>
         </div>
 
-        {# Delete zone #}
-        <div class="card card-body" style="padding:1.25rem;border-color:#fecaca">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:#c0392b;margin-bottom:.75rem">Zone dangereuse</div>
+        <div class="card card-body danger-zone">
+            <div class="danger-zone-label"><i class="fas fa-exclamation-triangle" style="margin-right:.35rem"></i>Zone dangereuse</div>
+            <p style="font-size:.78rem;color:var(--muted);margin-bottom:.85rem">Cette action est irréversible. Toutes les données associées seront supprimées.</p>
             {{ include('etudiant/_delete_form.html.twig') }}
         </div>
-    </div>
 
+    </div>
 </div>
 
 {% endblock %}

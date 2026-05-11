@@ -1,41 +1,94 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Soutenance index{% endblock %}
+{% block title %}Soutenances — Gestion Stages{% endblock %}
+
+{% block breadcrumb %}
+    <li><span class="sep">/</span></li>
+    <li>Soutenances</li>
+{% endblock %}
+
+{% block topbar_actions %}
+    <a href="{{ path('app_soutenance_new') }}" class="btn btn-primary btn-sm">
+        <i class="fas fa-plus"></i> Nouvelle soutenance
+    </a>
+{% endblock %}
 
 {% block body %}
-    <h1>Soutenance index</h1>
 
-    <table class="table">
+<div class="page-header">
+    <div class="page-title">
+        <em>liste des</em>
+        Soutenances
+    </div>
+</div>
+
+{# ── Stats ── #}
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-label">Total soutenances</div>
+        <div class="stat-value">{{ soutenances|length }}</div>
+    </div>
+    
+   
+</div>
+
+{# ── Table ── #}
+<div class="card">
+    <table class="data-table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>DateSoutenance</th>
-                <th>Note</th>
-                <th>Enseignant</th>
-                <th>Etudiant</th>
-                <th>actions</th>
+                <th>#</th>
+                <th><i class="fas fa-calendar-alt" style="margin-right:.35rem;opacity:.5"></i>Date</th>
+                <th><i class="fas fa-star" style="margin-right:.35rem;opacity:.5"></i>Note</th>
+                <th><i class="fas fa-chalkboard-teacher" style="margin-right:.35rem;opacity:.5"></i>Enseignant</th>
+                <th><i class="fas fa-user-graduate" style="margin-right:.35rem;opacity:.5"></i>Étudiant</th>
+                <th style="text-align:right">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for soutenance in soutenances %}
             <tr>
-                <td>{{ soutenance.id }}</td>
-                <td>{{ soutenance.dateSoutenance ? soutenance.dateSoutenance|date('Y-m-d') : '' }}</td>
-                <td>{{ soutenance.note }}</td>
-                <td>{{ soutenance.enseignant ? soutenance.enseignant.nom ~ ' ' ~ soutenance.enseignant.prenom : '-' }}</td>
-                <td>{{ soutenance.etudiant ? soutenance.etudiant.nom ~ ' ' ~ soutenance.etudiant.prenom : '-' }}</td>
+                <td class="id-cell">{{ soutenance.id }}</td>
                 <td>
-                    <a href="{{ path('app_soutenance_show', {'id': soutenance.id}) }}">show</a>
-                    <a href="{{ path('app_soutenance_edit', {'id': soutenance.id}) }}">edit</a>
+                    <span class="badge-chip">
+                        <i class="fas fa-calendar" style="font-size:.6rem"></i>
+                        {{ soutenance.dateSoutenance ? soutenance.dateSoutenance|date('d/m/Y') : '—' }}
+                    </span>
+                </td>
+                <td style="font-weight:600">
+                    {% if soutenance.note is not null %}
+                        {{ soutenance.note }}/20
+                    {% else %}
+                        <span style="color:var(--muted)">—</span>
+                    {% endif %}
+                </td>
+                <td style="color:var(--muted)">
+                    {{ soutenance.enseignant ? soutenance.enseignant.nom ~ ' ' ~ soutenance.enseignant.prenom : '—' }}
+                </td>
+                <td style="font-weight:600">
+                    {{ soutenance.etudiant ? soutenance.etudiant.nom ~ ' ' ~ soutenance.etudiant.prenom : '—' }}
+                </td>
+                <td>
+                    <div class="action-group" style="justify-content:flex-end">
+                        <a href="{{ path('app_soutenance_show', {'id': soutenance.id}) }}" class="action-link view">
+                            <i class="fas fa-eye"></i> Voir
+                        </a>
+                        <a href="{{ path('app_soutenance_edit', {'id': soutenance.id}) }}" class="action-link edit">
+                            <i class="fas fa-pen"></i> Modifier
+                        </a>
+                    </div>
                 </td>
             </tr>
         {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
+            <tr class="empty-row">
+                <td colspan="6">
+                    <i class="fas fa-inbox"></i>
+                    Aucune soutenance enregistrée.
+                </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+</div>
 
-    <a href="{{ path('app_soutenance_new') }}">Create new</a>
 {% endblock %}

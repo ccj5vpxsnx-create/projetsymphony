@@ -1,36 +1,82 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste Enseignants{% endblock %}
+{% block title %}Étudiants — Gestion Stages{% endblock %}
+
+{% block breadcrumb %}
+    <li><span class="sep">/</span></li>
+    <li>Étudiants</li>
+{% endblock %}
+
+{% block topbar_actions %}
+    <a href="{{ path('app_enseignant_new') }}" class="btn btn-primary btn-sm">
+        <i class="fas fa-plus"></i> Nouvel enseignant
+    </a>
+{% endblock %}
 
 {% block body %}
-<div class="card p-4">
 
-    <table class="table table-hover table-striped">
-        <thead class="table-dark">
+<div class="page-header">
+    <div class="page-title">
+        <em>liste des</em>
+        Enseignants
+    </div>
+</div>
+
+{# ── Stats ── #}
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-label">Total étudiants</div>
+        <div class="stat-value">{{ enseignants|length }}</div>
+    </div>
+   
+
+</div>
+
+{# ── Table ── #}
+<div class="card">
+    <table class="data-table">
+        <thead>
             <tr>
-                <th>ID</th>
-                <th>Matricule</th>
-                <th>Nom</th>
+                <th>#</th>
+                <th><i class="fas fa-id-card" style="margin-right:.35rem;opacity:.5"></i>matricule</th>
+                <th><i class="fas fa-user" style="margin-right:.35rem;opacity:.5"></i>Nom</th>
                 <th>Prénom</th>
-                <th>Actions</th>
+                <th style="text-align:right">Actions</th>
             </tr>
         </thead>
         <tbody>
-            {% for enseignant in enseignants %}
+        {% for enseignant in enseignants %}
             <tr>
-                <td>{{ enseignant.id }}</td>
-                <td>{{ enseignant.matricule }}</td>
-                <td>{{ enseignant.nom }}</td>
-                <td>{{ enseignant.prenom }}</td>
+                <td class="id-cell">{{ enseignant.id }}</td>
                 <td>
-                    <a href="{{ path('app_enseignant_show', {'id': enseignant.id}) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                    <a href="{{ path('app_enseignant_edit', {'id': enseignant.id}) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                    <span class="badge-chip">
+                        <i class="fas fa-hashtag" style="font-size:.6rem"></i>
+                        {{ enseignant.matricule }}
+                    </span>
+                </td>
+                <td style="font-weight:600">{{ enseignant.nom }}</td>
+                <td style="color:var(--muted)">{{ enseignant.prenom }}</td>
+                <td>
+                    <div class="action-group" style="justify-content:flex-end">
+                        <a href="{{ path('app_enseignant_show', {'id': enseignant.id}) }}" class="action-link view">
+                            <i class="fas fa-eye"></i> Voir
+                        </a>
+                        <a href="{{ path('app_enseignant_edit', {'id': enseignant.id}) }}" class="action-link edit">
+                            <i class="fas fa-pen"></i> Modifier
+                        </a>
+                    </div>
                 </td>
             </tr>
-            {% else %}
-            <tr><td colspan="5" class="text-center">Aucun enseignant</td></tr>
-            {% endfor %}
+        {% else %}
+            <tr class="empty-row">
+                <td colspan="5">
+                    <i class="fas fa-inbox"></i>
+                    Aucun enseignant enregistré.
+                </td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>
+
 {% endblock %}

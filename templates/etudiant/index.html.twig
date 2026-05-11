@@ -2,32 +2,50 @@
 
 {% block title %}Étudiants — Gestion Stages{% endblock %}
 
-{% block body %}
-
-{# ── Breadcrumb ── #}
-<ul class="breadcrumb">
-    <li><a href="#"><i class="fas fa-home"></i></a></li>
+{% block breadcrumb %}
     <li><span class="sep">/</span></li>
     <li>Étudiants</li>
-</ul>
+{% endblock %}
 
-{# ── Page header ── #}
+{% block topbar_actions %}
+    <a href="{{ path('app_etudiant_new') }}" class="btn btn-primary btn-sm">
+        <i class="fas fa-plus"></i> Nouvel étudiant
+    </a>
+{% endblock %}
+
+{% block body %}
+
 <div class="page-header">
-    <h1>
-        <span>liste des</span>
+    <div class="page-title">
+        <em>liste des</em>
         Étudiants
-    </h1>
-   
+    </div>
 </div>
 
-{# ── Table card ── #}
+{# ── Stats ── #}
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-label">Total étudiants</div>
+        <div class="stat-value">{{ etudiants|length }}</div>
+    </div>
+    <div class="stat-card" style="border-top-color:#86efac">
+        <div class="stat-label">Inscrits ce mois</div>
+        <div class="stat-value">—</div>
+    </div>
+    <div class="stat-card" style="border-top-color:#fde68a">
+        <div class="stat-label">Avec soutenance</div>
+        <div class="stat-value">—</div>
+    </div>
+</div>
+
+{# ── Table ── #}
 <div class="card">
     <table class="data-table">
         <thead>
             <tr>
                 <th>#</th>
-                <th><i class="fas fa-id-card" style="margin-right:.4rem;opacity:.5"></i>NCE</th>
-                <th><i class="fas fa-user" style="margin-right:.4rem;opacity:.5"></i>Nom</th>
+                <th><i class="fas fa-id-card" style="margin-right:.35rem;opacity:.5"></i>NCE</th>
+                <th><i class="fas fa-user" style="margin-right:.35rem;opacity:.5"></i>Nom</th>
                 <th>Prénom</th>
                 <th style="text-align:right">Actions</th>
             </tr>
@@ -38,7 +56,7 @@
                 <td class="id-cell">{{ etudiant.id }}</td>
                 <td>
                     <span class="badge-chip">
-                        <i class="fas fa-hashtag" style="font-size:.65rem"></i>
+                        <i class="fas fa-hashtag" style="font-size:.6rem"></i>
                         {{ etudiant.nce }}
                     </span>
                 </td>
@@ -58,7 +76,7 @@
         {% else %}
             <tr class="empty-row">
                 <td colspan="5">
-                    <i class="fas fa-inbox" style="font-size:1.5rem;display:block;margin-bottom:.5rem;opacity:.3"></i>
+                    <i class="fas fa-inbox"></i>
                     Aucun étudiant enregistré.
                 </td>
             </tr>

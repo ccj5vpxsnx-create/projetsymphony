@@ -1,36 +1,88 @@
 {% extends 'base.html.twig' %}
-{% block title %}Détail Enseignant{% endblock %}
+
+{% block title %}{{ enseignant.nom }} {{ enseignant.prenom }} — Gestion Stages{% endblock %}
+
+{% block breadcrumb %}
+    <li><span class="sep">/</span></li>
+    <li><a href="{{ path('app_enseignant_index') }}">Enseignants</a></li>
+    <li><span class="sep">/</span></li>
+    <li>{{ enseignant.nom }} {{ enseignant.prenom }}</li>
+{% endblock %}
+
+{% block topbar_actions %}
+    <a href="{{ path('app_enseignant_edit', {'id': enseignant.id}) }}" class="btn btn-outline btn-sm">
+        <i class="fas fa-pen"></i> Modifier
+    </a>
+    <a href="{{ path('app_enseignant_index') }}" class="btn btn-outline btn-sm">
+        <i class="fas fa-arrow-left"></i> Retour
+    </a>
+{% endblock %}
+
 {% block body %}
-<div class="card p-4">
-    <h1><i class="fas fa-user"></i> Détail Enseignant</h1>
-    <table class="table table-bordered mt-3">
-        <tbody>
-            <tr>
-                <th class="table-dark">ID</th>
-                <td>{{ enseignant.id }}</td>
-            </tr>
-            <tr>
-                <th class="table-dark">Matricule</th>
-                <td>{{ enseignant.matricule }}</td>
-            </tr>
-            <tr>
-                <th class="table-dark">Nom</th>
-                <td>{{ enseignant.nom }}</td>
-            </tr>
-            <tr>
-                <th class="table-dark">Prénom</th>
-                <td>{{ enseignant.prenom }}</td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="mt-3">
-        <a href="{{ path('app_enseignant_index') }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Retour
-        </a>
-        <a href="{{ path('app_enseignant_edit', {'id': enseignant.id}) }}" class="btn btn-warning">
-            <i class="fas fa-edit"></i> Modifier
-        </a>
-        {{ include('enseignant/_delete_form.html.twig') }}
+
+<div class="page-header">
+    <div class="page-title">
+        <em>fiche étudiant</em>
+        {{ enseignant.nom }} {{ enseignant.prenom }}
     </div>
 </div>
+
+<div style="display:grid;grid-template-columns:1fr 300px;gap:1.5rem;align-items:start">
+
+    {# ── Detail card ── #}
+    <div class="card">
+        <div style="padding:1.25rem 1.5rem .85rem;border-bottom:1px solid var(--sky-100);display:flex;align-items:center;gap:.85rem">
+            <div style="width:46px;height:46px;border-radius:50%;background:var(--sky-500);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-weight:600;font-size:1.15rem;flex-shrink:0">
+                {{ enseignant.nom|first|upper }}
+            </div>
+            <div>
+                <div style="font-weight:600;font-size:1rem">{{ enseignant.nom }} {{ enseignant.prenom }}</div>
+                <div style="font-size:.73rem;color:var(--muted)">Étudiant · ID #{{ enseignant.id }}</div>
+            </div>
+        </div>
+
+        <table class="detail-table">
+            <tr>
+                <th><i class="fas fa-hashtag" style="margin-right:.4rem;opacity:.5"></i>ID</th>
+                <td><span class="badge-chip"># {{ enseignant.id }}</span></td>
+            </tr>
+            <tr>
+                <th><i class="fas fa-id-card" style="margin-right:.4rem;opacity:.5"></i>Matricule</th>
+                <td><span class="badge-chip"><i class="fas fa-hashtag" style="font-size:.6rem"></i> {{ enseignant.matricule }}</span></td>
+            </tr>
+            <tr>
+                <th><i class="fas fa-user" style="margin-right:.4rem;opacity:.5"></i>Nom</th>
+                <td style="font-weight:600">{{ enseignant.nom }}</td>
+            </tr>
+            <tr>
+                <th><i class="fas fa-user" style="margin-right:.4rem;opacity:.5"></i>Prénom</th>
+                <td>{{ enseignant.prenom }}</td>
+            </tr>
+        </table>
+    </div>
+
+    {# ── Side panel ── #}
+    <div style="display:flex;flex-direction:column;gap:1rem">
+
+        <div class="card card-body">
+            <div style="font-size:.63rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600;margin-bottom:.85rem">Actions</div>
+            <div style="display:flex;flex-direction:column;gap:.5rem">
+                <a href="{{ path('app_enseignant_edit', {'id': enseignant.id}) }}" class="btn btn-primary" style="justify-content:center">
+                    <i class="fas fa-pen"></i> Modifier la fiche
+                </a>
+                <a href="{{ path('app_enseignant_index') }}" class="btn btn-outline" style="justify-content:center">
+                    <i class="fas fa-list"></i> Voir la liste
+                </a>
+            </div>
+        </div>
+
+        <div class="card card-body danger-zone">
+            <div class="danger-zone-label"><i class="fas fa-exclamation-triangle" style="margin-right:.35rem"></i>Zone dangereuse</div>
+            <p style="font-size:.78rem;color:var(--muted);margin-bottom:.85rem">Cette action est irréversible. Toutes les données associées seront supprimées.</p>
+            {{ include('enseignant/_delete_form.html.twig') }}
+        </div>
+
+    </div>
+</div>
+
 {% endblock %}

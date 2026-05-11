@@ -1,30 +1,109 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Soutenance{% endblock %}
+{% block title %}Soutenance #{{ soutenance.id }} — Gestion Stages{% endblock %}
+
+{% block breadcrumb %}
+    <li><span class="sep">/</span></li>
+    <li><a href="{{ path('app_soutenance_index') }}">Soutenances</a></li>
+    <li><span class="sep">/</span></li>
+    <li>Soutenance #{{ soutenance.id }}</li>
+{% endblock %}
+
+{% block topbar_actions %}
+    <a href="{{ path('app_soutenance_edit', {'id': soutenance.id}) }}" class="btn btn-outline btn-sm">
+        <i class="fas fa-pen"></i> Modifier
+    </a>
+    <a href="{{ path('app_soutenance_index') }}" class="btn btn-outline btn-sm">
+        <i class="fas fa-arrow-left"></i> Retour
+    </a>
+{% endblock %}
 
 {% block body %}
-    <h1>Soutenance</h1>
 
-    <table class="table">
-        <tbody>
+<div class="page-header">
+    <div class="page-title">
+        <em>fiche soutenance</em>
+        Soutenance #{{ soutenance.id }}
+    </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 300px;gap:1.5rem;align-items:start">
+
+    {# ── Detail card ── #}
+    <div class="card">
+        <div style="padding:1.25rem 1.5rem .85rem;border-bottom:1px solid var(--sky-100);display:flex;align-items:center;gap:.85rem">
+            <div style="width:46px;height:46px;border-radius:50%;background:var(--sky-500);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-weight:600;font-size:1.15rem;flex-shrink:0">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div>
+                <div style="font-weight:600;font-size:1rem">
+                    {{ soutenance.etudiant ? soutenance.etudiant.nom ~ ' ' ~ soutenance.etudiant.prenom : '—' }}
+                </div>
+                <div style="font-size:.73rem;color:var(--muted)">Soutenance · ID #{{ soutenance.id }}</div>
+            </div>
+        </div>
+
+        <table class="detail-table">
             <tr>
-                <th>Id</th>
-                <td>{{ soutenance.id }}</td>
+                <th><i class="fas fa-hashtag" style="margin-right:.4rem;opacity:.5"></i>ID</th>
+                <td><span class="badge-chip"># {{ soutenance.id }}</span></td>
             </tr>
             <tr>
-                <th>DateSoutenance</th>
-                <td>{{ soutenance.dateSoutenance ? soutenance.dateSoutenance|date('Y-m-d') : '' }}</td>
+                <th><i class="fas fa-calendar-alt" style="margin-right:.4rem;opacity:.5"></i>Date</th>
+                <td>
+                    <span class="badge-chip">
+                        <i class="fas fa-calendar" style="font-size:.6rem"></i>
+                        {{ soutenance.dateSoutenance ? soutenance.dateSoutenance|date('d/m/Y') : '—' }}
+                    </span>
+                </td>
             </tr>
             <tr>
-                <th>Note</th>
-                <td>{{ soutenance.note }}</td>
+                <th><i class="fas fa-star" style="margin-right:.4rem;opacity:.5"></i>Note</th>
+                <td style="font-weight:600">
+                    {% if soutenance.note is not null %}
+                        {{ soutenance.note }}/20
+                    {% else %}
+                        <span style="color:var(--muted)">—</span>
+                    {% endif %}
+                </td>
             </tr>
-        </tbody>
-    </table>
+            <tr>
+                <th><i class="fas fa-chalkboard-teacher" style="margin-right:.4rem;opacity:.5"></i>Enseignant</th>
+                <td>
+                    {{ soutenance.enseignant ? soutenance.enseignant.nom ~ ' ' ~ soutenance.enseignant.prenom : '—' }}
+                </td>
+            </tr>
+            <tr>
+                <th><i class="fas fa-user-graduate" style="margin-right:.4rem;opacity:.5"></i>Étudiant</th>
+                <td style="font-weight:600">
+                    {{ soutenance.etudiant ? soutenance.etudiant.nom ~ ' ' ~ soutenance.etudiant.prenom : '—' }}
+                </td>
+            </tr>
+        </table>
+    </div>
 
-    <a href="{{ path('app_soutenance_index') }}">back to list</a>
+    {# ── Side panel ── #}
+    <div style="display:flex;flex-direction:column;gap:1rem">
 
-    <a href="{{ path('app_soutenance_edit', {'id': soutenance.id}) }}">edit</a>
+        <div class="card card-body">
+            <div style="font-size:.63rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600;margin-bottom:.85rem">Actions</div>
+            <div style="display:flex;flex-direction:column;gap:.5rem">
+                <a href="{{ path('app_soutenance_edit', {'id': soutenance.id}) }}" class="btn btn-primary" style="justify-content:center">
+                    <i class="fas fa-pen"></i> Modifier la fiche
+                </a>
+                <a href="{{ path('app_soutenance_index') }}" class="btn btn-outline" style="justify-content:center">
+                    <i class="fas fa-list"></i> Voir la liste
+                </a>
+            </div>
+        </div>
 
-    {{ include('soutenance/_delete_form.html.twig') }}
+        <div class="card card-body danger-zone">
+            <div class="danger-zone-label"><i class="fas fa-exclamation-triangle" style="margin-right:.35rem"></i>Zone dangereuse</div>
+            <p style="font-size:.78rem;color:var(--muted);margin-bottom:.85rem">Cette action est irréversible. Toutes les données associées seront supprimées.</p>
+            {{ include('soutenance/_delete_form.html.twig') }}
+        </div>
+
+    </div>
+</div>
+
 {% endblock %}

@@ -4,53 +4,482 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Gestion Stages{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; }
-        .navbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .card { border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { color: #764ba2; font-weight: bold; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --sky-50:  #f0f9ff;
+            --sky-100: #e0f2fe;
+            --sky-200: #bae6fd;
+            --sky-300: #7dd3fc;
+            --sky-400: #38bdf8;
+            --sky-500: #0ea5e9;
+            --sky-600: #0284c7;
+            --sky-700: #0369a1;
+            --sky-800: #075985;
+            --sky-900: #0c4a6e;
+
+            --bg:      #f0f9ff;
+            --sidebar: #e0f2fe;
+            --sidebar-border: #bae6fd;
+            --white:   #ffffff;
+            --ink:     #0c4a6e;
+            --muted:   #4a7fa0;
+            --border:  #bae6fd;
+
+            --success-bg: #dcfce7; --success-text: #166534;
+            --warn-bg:    #fef3c7; --warn-text:    #92400e;
+            --danger-bg:  #fee2e2; --danger-text:  #991b1b;
+            --info-bg:    #e0f2fe; --info-text:    #075985;
+
+            --radius:    10px;
+            --radius-lg: 14px;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            font-size: 14px;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ── Layout ── */
+        .app-layout {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: 100vh;
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            background: var(--sidebar);
+            border-right: 1px solid var(--sidebar-border);
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+        .sidebar-logo {
+            padding: 1.4rem 1.25rem 1rem;
+            border-bottom: 1px solid var(--sidebar-border);
+        }
+        .sidebar-logo .logo-mark {
+            font-family: 'Lora', serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--sky-800);
+        }
+        .sidebar-logo .logo-mark span { color: var(--sky-500); }
+        .sidebar-logo .logo-sub {
+            font-size: .6rem;
+            color: var(--muted);
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+        .sidebar-user {
+            padding: .8rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+            border-bottom: 1px solid var(--sidebar-border);
+        }
+        .user-avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: var(--sky-500);
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: .68rem; font-weight: 600;
+            flex-shrink: 0;
+        }
+        .user-name  { font-size: .8rem; font-weight: 500; color: var(--ink); }
+        .user-role  { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+
+        .nav-group  { padding: .65rem 0; }
+        .nav-label  {
+            padding: .2rem 1.25rem;
+            font-size: .58rem;
+            color: var(--muted);
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            margin-bottom: .2rem;
+        }
+        .nav-item {
+            display: flex; align-items: center; gap: .6rem;
+            padding: .48rem 1.25rem;
+            color: var(--muted);
+            font-size: .8rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all .15s;
+            border-left: 2px solid transparent;
+            text-decoration: none;
+            margin: 1px 0;
+        }
+        .nav-item i { width: 16px; text-align: center; font-size: 13px; }
+        .nav-item:hover { color: var(--sky-700); background: rgba(14,165,233,.08); }
+        .nav-item.active {
+            color: var(--sky-700);
+            background: var(--sky-100);
+            border-left-color: var(--sky-500);
+            font-weight: 500;
+        }
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: .9rem 1.25rem;
+            border-top: 1px solid var(--sidebar-border);
+        }
+        .logout-link {
+            display: flex; align-items: center; gap: .5rem;
+            color: var(--muted);
+            font-size: .78rem;
+            text-decoration: none;
+            padding: .35rem 0;
+            transition: color .15s;
+        }
+        .logout-link:hover { color: var(--danger-text); }
+
+        /* ── Main ── */
+        .main-area { display: flex; flex-direction: column; min-height: 100vh; }
+
+        .topbar {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: .85rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky; top: 0; z-index: 10;
+        }
+        .breadcrumb {
+            display: flex; align-items: center; gap: .4rem;
+            font-size: .73rem; color: var(--muted); list-style: none;
+        }
+        .breadcrumb .sep { opacity: .4; }
+        .breadcrumb a { color: var(--muted); text-decoration: none; }
+        .breadcrumb a:hover { color: var(--sky-600); }
+        .breadcrumb li:last-child { color: var(--ink); font-weight: 500; }
+
+        .page-content { padding: 2rem; flex: 1; }
+
+        /* ── Page header ── */
+        .page-header {
+            margin-bottom: 1.75rem;
+            display: flex; align-items: flex-end; justify-content: space-between;
+        }
+        .page-title {
+            font-family: 'Lora', serif;
+            font-size: 1.55rem;
+            font-weight: 400;
+            color: var(--ink);
+            line-height: 1.2;
+        }
+        .page-title em {
+            font-style: italic;
+            color: var(--muted);
+            font-size: .82rem;
+            display: block;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 400;
+            margin-bottom: .1rem;
+            letter-spacing: .02em;
+        }
+        .header-actions { display: flex; gap: .6rem; }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-flex; align-items: center; gap: .4rem;
+            padding: .5rem 1rem;
+            border-radius: var(--radius);
+            font-size: .8rem; font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all .15s;
+            text-decoration: none;
+            font-family: inherit;
+            line-height: 1;
+        }
+        .btn-primary { background: var(--sky-500); color: #fff; border-color: var(--sky-500); }
+        .btn-primary:hover { background: var(--sky-600); border-color: var(--sky-600); }
+        .btn-outline  { background: var(--white); color: var(--sky-700); border-color: var(--border); }
+        .btn-outline:hover { background: var(--sky-50); border-color: var(--sky-300); }
+        .btn-danger   { background: var(--danger-bg); color: var(--danger-text); border-color: #fecaca; }
+        .btn-danger:hover { background: #fecaca; }
+        .btn-sm { padding: .32rem .7rem; font-size: .74rem; }
+
+        /* ── Cards ── */
+        .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+        .card-body { padding: 1.25rem 1.5rem; }
+
+        /* ── Stats ── */
+        .stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.15rem 1.4rem;
+            border-top: 3px solid var(--sky-300);
+        }
+        .stat-label { font-size: .63rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: .4rem; }
+        .stat-value { font-family: 'Lora', serif; font-size: 1.9rem; font-weight: 400; color: var(--ink); }
+        .stat-delta { font-size: .7rem; color: var(--success-text); margin-top: .2rem; }
+
+        /* ── Data table ── */
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th {
+            font-size: .63rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: .1em;
+            color: var(--muted);
+            padding: .68rem 1.25rem;
+            background: var(--sky-50);
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+        .data-table td {
+            padding: .85rem 1.25rem;
+            border-bottom: 1px solid var(--sky-100);
+            vertical-align: middle;
+            font-size: .83rem;
+        }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tbody tr:hover td { background: var(--sky-50); }
+        .id-cell { font-family: monospace; font-size: .7rem; color: var(--muted); }
+
+        .badge-chip {
+            display: inline-flex; align-items: center; gap: .25rem;
+            padding: .18rem .55rem;
+            background: var(--sky-100);
+            border: 1px solid var(--sky-200);
+            border-radius: 20px;
+            font-size: .7rem; color: var(--sky-800);
+            font-family: monospace;
+        }
+        .action-group { display: flex; gap: .35rem; }
+        .action-link {
+            display: inline-flex; align-items: center; gap: .28rem;
+            padding: .28rem .6rem;
+            border-radius: 6px;
+            font-size: .73rem; font-weight: 500;
+            text-decoration: none;
+            transition: all .15s; cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .action-link.view  { color: var(--sky-800); background: var(--sky-100); border-color: var(--sky-200); }
+        .action-link.view:hover  { background: var(--sky-200); }
+        .action-link.edit  { color: var(--warn-text); background: var(--warn-bg); border-color: #fde68a; }
+        .action-link.edit:hover  { background: #fde68a; }
+
+        /* ── Badges ── */
+        .badge {
+            display: inline-flex; align-items: center;
+            padding: .2rem .55rem;
+            border-radius: 20px;
+            font-size: .7rem; font-weight: 500;
+        }
+        .badge-avenir  { background: var(--info-bg);    color: var(--info-text); }
+        .badge-passee  { background: var(--warn-bg);    color: var(--warn-text); }
+        .badge-notee   { background: var(--success-bg); color: var(--success-text); }
+        .badge-default { background: var(--sky-100);    color: var(--muted); }
+
+        /* ── Detail table ── */
+        .detail-table { width: 100%; border-collapse: collapse; }
+        .detail-table th,
+        .detail-table td {
+            padding: .72rem 1.25rem;
+            font-size: .83rem;
+            border-bottom: 1px solid var(--sky-100);
+            vertical-align: middle;
+        }
+        .detail-table tr:last-child th,
+        .detail-table tr:last-child td { border-bottom: none; }
+        .detail-table th {
+            font-size: .67rem; text-transform: uppercase; letter-spacing: .09em;
+            color: var(--muted); font-weight: 500; width: 36%;
+            background: var(--sky-50);
+        }
+
+        /* ── Forms ── */
+        .form-group   { margin-bottom: 1.1rem; }
+        .form-label   { display: block; font-size: .75rem; font-weight: 500; color: var(--ink); margin-bottom: .32rem; }
+        .form-control, .form-select {
+            width: 100%;
+            padding: .52rem .85rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: .83rem;
+            font-family: inherit;
+            color: var(--ink);
+            background: var(--white);
+            transition: border-color .15s;
+            appearance: none;
+        }
+        .form-control:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--sky-400);
+            box-shadow: 0 0 0 3px rgba(14,165,233,.12);
+        }
+        .form-error { font-size: .72rem; color: var(--danger-text); margin-top: .25rem; }
+
+        /* ── Auth layout ── */
+        .auth-layout {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--sky-100) 0%, var(--sky-50) 100%);
+        }
+        .auth-card {
+            width: 400px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        .auth-header {
+            background: var(--sky-500);
+            padding: 1.85rem;
+            text-align: center;
+        }
+        .auth-logo  { font-family: 'Lora', serif; font-size: 1.2rem; font-weight: 600; color: #fff; }
+        .auth-sub   { font-size: .72rem; color: rgba(255,255,255,.7); margin-top: .3rem; letter-spacing: .06em; }
+        .auth-body  { padding: 1.75rem; }
+        .auth-footer {
+            padding: .9rem 1.75rem;
+            background: var(--sky-50);
+            text-align: center;
+            font-size: .77rem;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+        }
+        .auth-footer a { color: var(--sky-600); text-decoration: none; font-weight: 500; }
+        .auth-footer a:hover { text-decoration: underline; }
+
+        /* ── Alert ── */
+        .alert { padding: .85rem 1.1rem; border-radius: var(--radius); font-size: .83rem; margin-bottom: 1rem; border: 1px solid transparent; }
+        .alert-info    { background: var(--info-bg);    color: var(--info-text);    border-color: var(--sky-200); }
+        .alert-danger  { background: var(--danger-bg);  color: var(--danger-text);  border-color: #fecaca; }
+        .alert-success { background: var(--success-bg); color: var(--success-text); border-color: #bbf7d0; }
+
+        /* ── Danger zone card ── */
+        .danger-zone { border-color: #fecaca !important; }
+        .danger-zone-label {
+            font-size: .63rem; text-transform: uppercase; letter-spacing: .12em;
+            color: var(--danger-text); font-weight: 600; margin-bottom: .5rem;
+        }
+
+        /* ── Empty state ── */
+        .empty-row td {
+            text-align: center;
+            padding: 2.5rem;
+            color: var(--muted);
+            font-size: .85rem;
+        }
+        .empty-row i { font-size: 1.6rem; display: block; margin-bottom: .5rem; opacity: .35; }
     </style>
+    {% block stylesheets %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-graduation-cap"></i> Gestion Stages
-            </a>
-            <div class="navbar-nav ms-auto">
 
-                {# Liens visibles uniquement pour l'admin #}
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a class="nav-link text-white" href="/admin/enseignant"><i class="fas fa-chalkboard-teacher"></i> Enseignants</a>
-                    <a class="nav-link text-white" href="/admin/etudiant"><i class="fas fa-user-graduate"></i> Etudiants</a>
-                    <a class="nav-link text-white" href="/admin/soutenance"><i class="fas fa-calendar"></i> Soutenances</a>
-                {% endif %}
+{% set current_route = app.request.attributes.get('_route') %}
 
-                {# Lien dashboard enseignant #}
-                {% if is_granted('ROLE_ENSEIGNANT') %}
-                    <a class="nav-link text-white" href="/dashboard/enseignant"><i class="fas fa-chalkboard-teacher"></i> Mon Dashboard</a>
-                {% endif %}
+<div class="app-layout">
 
-                {# Lien dashboard étudiant #}
-                {% if is_granted('ROLE_ETUDIANT') %}
-                    <a class="nav-link text-white" href="/dashboard/etudiant"><i class="fas fa-user-graduate"></i> Mon Dashboard</a>
-                {% endif %}
+    {# ── Sidebar ── #}
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-mark">Gestion <span>Stages</span></div>
+            <div class="logo-sub">Plateforme de suivi</div>
+        </div>
 
-                {# Logout si connecté #}
-                {% if app.user %}
-                    <a class="nav-link text-white" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
-                {% else %}
-                    <a class="nav-link text-white" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> Connexion</a>
-                {% endif %}
-
+        {% if app.user %}
+        <div class="sidebar-user">
+            <div class="user-avatar">
+                {{ app.user.userIdentifier|first|upper }}
+            </div>
+            <div>
+                <div class="user-name">{{ app.user.userIdentifier }}</div>
+                <div class="user-role">
+                    {% if is_granted('ROLE_ADMIN') %}Administrateur
+                    {% elseif is_granted('ROLE_ENSEIGNANT') %}Enseignant
+                    {% elseif is_granted('ROLE_ETUDIANT') %}Étudiant
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </nav>
-    <div class="container">
-        {% block body %}{% endblock %}
+        {% endif %}
+
+        <nav>
+            {% if is_granted('ROLE_ADMIN') %}
+            <div class="nav-group">
+                <div class="nav-label">Administration</div>
+                <a href="/admin/etudiant" class="nav-item {% if 'app_etudiant' in current_route %}active{% endif %}">
+                    <i class="fas fa-user-graduate"></i> Étudiants
+                </a>
+                <a href="/admin/enseignant" class="nav-item {% if 'app_enseignant' in current_route %}active{% endif %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Enseignants
+                </a>
+                <a href="/admin/soutenance" class="nav-item {% if 'app_soutenance' in current_route %}active{% endif %}">
+                    <i class="fas fa-calendar-check"></i> Soutenances
+                </a>
+            </div>
+            {% endif %}
+
+            {% if is_granted('ROLE_ENSEIGNANT') %}
+            <div class="nav-group">
+                <div class="nav-label">Mon espace</div>
+                <a href="/dashboard/enseignant" class="nav-item {% if current_route == 'dashboard_enseignant' %}active{% endif %}">
+                    <i class="fas fa-tachometer-alt"></i> Tableau de bord
+                </a>
+            </div>
+            {% endif %}
+
+            {% if is_granted('ROLE_ETUDIANT') %}
+            <div class="nav-group">
+                <div class="nav-label">Mon espace</div>
+                <a href="/dashboard/etudiant" class="nav-item {% if current_route == 'dashboard_etudiant' %}active{% endif %}">
+                    <i class="fas fa-tachometer-alt"></i> Tableau de bord
+                </a>
+            </div>
+            {% endif %}
+        </nav>
+
+        <div class="sidebar-bottom">
+            {% if app.user %}
+                <a href="{{ path('app_logout') }}" class="logout-link">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="logout-link">
+                    <i class="fas fa-sign-in-alt"></i> Connexion
+                </a>
+            {% endif %}
+        </div>
+    </aside>
+
+    {# ── Main ── #}
+    <div class="main-area">
+        <header class="topbar">
+            <ul class="breadcrumb">
+                <li><a href="#"><i class="fas fa-home"></i></a></li>
+                {% block breadcrumb %}{% endblock %}
+            </ul>
+            <div class="header-actions">
+                {% block topbar_actions %}{% endblock %}
+            </div>
+        </header>
+
+        <main class="page-content">
+            {% block body %}{% endblock %}
+        </main>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</div>
+
+{% block javascripts %}{% endblock %}
 </body>
 </html>

@@ -1,12 +1,48 @@
 {% extends 'base.html.twig' %}
-{% block title %}Modifier Enseignant{% endblock %}
-{% block body %}
-<div class="card p-4">
-    <h1><i class="fas fa-edit"></i> Modifier Enseignant</h1>
-    {{ include('enseignant/_form.html.twig', {'button_label': 'Modifier'}) }}
-    {{ include('enseignant/_delete_form.html.twig') }}
-    <a href="{{ path('app_enseignant_index') }}" class="btn btn-secondary mt-3">
+
+{% block title %}Modifier {{ enseignant.nom }} — Gestion Stages{% endblock %}
+
+{% block breadcrumb %}
+    <li><span class="sep">/</span></li>
+    <li><a href="{{ path('app_enseignant_index') }}">Étudiants</a></li>
+    <li><span class="sep">/</span></li>
+    <li><a href="{{ path('app_enseignant_show', {'id': enseignant.id}) }}">{{ enseignant.nom }}</a></li>
+    <li><span class="sep">/</span></li>
+    <li>Modifier</li>
+{% endblock %}
+
+{% block topbar_actions %}
+    <a href="{{ path('app_enseignant_show', {'id': enseignant.id}) }}" class="btn btn-outline btn-sm">
+        <i class="fas fa-eye"></i> Voir la fiche
+    </a>
+    <a href="{{ path('app_enseignant_index') }}" class="btn btn-outline btn-sm">
         <i class="fas fa-arrow-left"></i> Retour
     </a>
+{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+    <div class="page-title">
+        <em>édition</em>
+        {{ enseignant.nom }} {{ enseignant.prenom }}
+    </div>
 </div>
+
+<div style="display:grid;grid-template-columns:1fr 300px;gap:1.5rem;align-items:start">
+
+    <div class="card card-body">
+        {{ include('enseignant/_form.html.twig', {'button_label': 'Enregistrer les modifications'}) }}
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:1rem">
+        <div class="card card-body danger-zone">
+            <div class="danger-zone-label"><i class="fas fa-exclamation-triangle" style="margin-right:.35rem"></i>Supprimer</div>
+            <p style="font-size:.78rem;color:var(--muted);margin-bottom:.85rem">Cette action est irréversible. Toutes les données associées seront supprimées.</p>
+            {{ include('enseignant/_delete_form.html.twig') }}
+        </div>
+    </div>
+
+</div>
+
 {% endblock %}

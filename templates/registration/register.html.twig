@@ -1,67 +1,175 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription — Gestion Stages</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --sky-50:#f0f9ff; --sky-100:#e0f2fe; --sky-200:#bae6fd;
+            --sky-400:#38bdf8; --sky-500:#0ea5e9; --sky-600:#0284c7;
+            --ink:#0c4a6e; --muted:#4a7fa0; --border:#bae6fd;
+            --white:#ffffff; --danger:#991b1b; --danger-bg:#fee2e2;
+            --radius:10px; --radius-lg:14px;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--sky-100);
+            color: var(--ink);
+            padding: 2rem 1rem;
+        }
+        .auth-card {
+            width: 480px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        .auth-header {
+            background: var(--sky-500);
+            padding: 1.75rem;
+            text-align: center;
+        }
+        .auth-logo { font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: .25rem; }
+        .auth-sub  { font-size: .72rem; color: rgba(255,255,255,.75); letter-spacing: .06em; }
+        .auth-body { padding: 1.75rem; }
+        .form-row  { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-label { display: block; font-size: .75rem; font-weight: 500; color: var(--ink); margin-bottom: .3rem; }
+        .form-control, .form-select {
+            width: 100%; padding: .52rem .85rem;
+            border: 1px solid var(--border); border-radius: var(--radius);
+            font-size: .83rem; font-family: inherit; color: var(--ink);
+            background: var(--white); transition: border-color .15s;
+            appearance: none;
+        }
+        .form-control:focus, .form-select:focus {
+            outline: none; border-color: var(--sky-400);
+            box-shadow: 0 0 0 3px rgba(14,165,233,.12);
+        }
+        .form-error { font-size: .7rem; color: var(--danger); margin-top: .25rem; }
+        .btn-submit {
+            width: 100%; padding: .6rem 1rem;
+            background: var(--sky-500); color: #fff;
+            border: none; border-radius: var(--radius);
+            font-size: .85rem; font-weight: 500;
+            font-family: inherit; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: .4rem;
+            transition: background .15s; margin-top: .5rem;
+        }
+        .btn-submit:hover { background: var(--sky-600); }
+        .section-divider {
+            font-size: .63rem; text-transform: uppercase; letter-spacing: .12em;
+            color: var(--muted); font-weight: 600;
+            padding: .65rem 0 .4rem;
+            border-top: 1px solid var(--sky-100);
+            margin: .75rem 0 .75rem;
+        }
+        .auth-footer {
+            padding: .9rem 1.75rem;
+            background: var(--sky-50);
+            text-align: center;
+            font-size: .77rem;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+        }
+        .auth-footer a { color: var(--sky-600); text-decoration: none; font-weight: 500; }
+        .auth-footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
 
-{% block title %}Inscription{% endblock %}
+<div class="auth-card">
+    <div class="auth-header">
+        <div class="auth-logo">Gestion Stages</div>
+        <div class="auth-sub">Créer votre compte</div>
+    </div>
 
-{% block body %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white text-center">
-                    <h4>Créer un compte</h4>
+    <div class="auth-body">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+            <div class="section-divider">Informations de connexion</div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-envelope" style="margin-right:.35rem;opacity:.6"></i>
+                    {{ form_label(form.email) }}
+                </label>
+                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'votre@email.tn'}}) }}
+                {% if form.email.vars.errors|length > 0 %}
+                    <div class="form-error">{{ form_errors(form.email) }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-lock" style="margin-right:.35rem;opacity:.6"></i>
+                    {{ form_label(form.plainPassword) }}
+                </label>
+                {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder': '••••••••'}}) }}
+                {% if form.plainPassword.vars.errors|length > 0 %}
+                    <div class="form-error">{{ form_errors(form.plainPassword) }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-user-tag" style="margin-right:.35rem;opacity:.6"></i>
+                    {{ form_label(form.role) }}
+                </label>
+                {{ form_widget(form.role, {'attr': {'class': 'form-select'}}) }}
+                {% if form.role.vars.errors|length > 0 %}
+                    <div class="form-error">{{ form_errors(form.role) }}</div>
+                {% endif %}
+            </div>
+
+            <div class="section-divider">Informations personnelles</div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">{{ form_label(form.nom) }}</label>
+                    {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
+                    {% if form.nom.vars.errors|length > 0 %}
+                        <div class="form-error">{{ form_errors(form.nom) }}</div>
+                    {% endif %}
                 </div>
-                <div class="card-body">
-                    {{ form_start(form) }}
-
-                        <div class="mb-3">
-                            {{ form_label(form.email) }}
-                            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.email) }}
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form_label(form.plainPassword) }}
-                            {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.plainPassword) }}
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form_label(form.role) }}
-                            {{ form_widget(form.role, {'attr': {'class': 'form-select'}}) }}
-                            {{ form_errors(form.role) }}
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form_label(form.nom) }}
-                            {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.nom) }}
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form_label(form.prenom) }}
-                            {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.prenom) }}
-                        </div>
-
-                        <div class="mb-3">
-                            {{ form_label(form.identifiant) }}
-                            {{ form_widget(form.identifiant, {'attr': {'class': 'form-control'}}) }}
-                            {{ form_errors(form.identifiant) }}
-                        </div>
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">
-                                S'inscrire
-                            </button>
-                        </div>
-
-                    {{ form_end(form) }}
-                </div>
-                <div class="card-footer text-center">
-                    Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
+                <div class="form-group">
+                    <label class="form-label">{{ form_label(form.prenom) }}</label>
+                    {{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
+                    {% if form.prenom.vars.errors|length > 0 %}
+                        <div class="form-error">{{ form_errors(form.prenom) }}</div>
+                    {% endif %}
                 </div>
             </div>
-        </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-id-badge" style="margin-right:.35rem;opacity:.6"></i>
+                    {{ form_label(form.identifiant) }}
+                </label>
+                {{ form_widget(form.identifiant, {'attr': {'class': 'form-control', 'placeholder': 'Identifiant'}}) }}
+                {% if form.identifiant.vars.errors|length > 0 %}
+                    <div class="form-error">{{ form_errors(form.identifiant) }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-user-plus"></i> Créer mon compte
+            </button>
+
+        {{ form_end(form) }}
+    </div>
+
+    <div class="auth-footer">
+        Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a>
     </div>
 </div>
-{% endblock %}
+
+</body>
+</html>
