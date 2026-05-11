@@ -7,11 +7,7 @@
     <li>Étudiants</li>
 {% endblock %}
 
-{% block topbar_actions %}
-    <a href="{{ path('app_etudiant_new') }}" class="btn btn-primary btn-sm">
-        <i class="fas fa-plus"></i> Nouvel étudiant
-    </a>
-{% endblock %}
+
 
 {% block body %}
 
@@ -28,14 +24,7 @@
         <div class="stat-label">Total étudiants</div>
         <div class="stat-value">{{ etudiants|length }}</div>
     </div>
-    <div class="stat-card" style="border-top-color:#86efac">
-        <div class="stat-label">Inscrits ce mois</div>
-        <div class="stat-value">—</div>
-    </div>
-    <div class="stat-card" style="border-top-color:#fde68a">
-        <div class="stat-label">Avec soutenance</div>
-        <div class="stat-value">—</div>
-    </div>
+    
 </div>
 
 {# ── Table ── #}

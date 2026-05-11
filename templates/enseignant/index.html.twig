@@ -7,11 +7,7 @@
     <li>Étudiants</li>
 {% endblock %}
 
-{% block topbar_actions %}
-    <a href="{{ path('app_enseignant_new') }}" class="btn btn-primary btn-sm">
-        <i class="fas fa-plus"></i> Nouvel enseignant
-    </a>
-{% endblock %}
+
 
 {% block body %}
 
@@ -25,7 +21,7 @@
 {# ── Stats ── #}
 <div class="stat-grid">
     <div class="stat-card">
-        <div class="stat-label">Total étudiants</div>
+        <div class="stat-label">Total enseignants</div>
         <div class="stat-value">{{ enseignants|length }}</div>
     </div>
    
