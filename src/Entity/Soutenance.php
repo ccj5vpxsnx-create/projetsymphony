@@ -17,7 +17,7 @@ class Soutenance
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $dateSoutenance = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $note = null;
 
     #[ORM\ManyToOne(targetEntity: Enseignant::class)]

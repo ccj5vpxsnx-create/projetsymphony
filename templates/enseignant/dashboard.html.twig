@@ -33,16 +33,16 @@
                 <thead>
                     <tr>
                         <th><i class="fas fa-calendar" style="margin-right:.35rem;opacity:.5"></i>Date</th>
-                        <th><i class="fas fa-chalkboard-teacher" style="margin-right:.35rem;opacity:.5"></i>Enseignant</th>
+                        <th><i class="fas fa-chalkboard-teacher" style="margin-right:.35rem;opacity:.5"></i>Etudiant</th>
                         <th>État</th>
-                        <th>Note</th>
+                        <th style="min-width:180px">Note</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for soutenance in soutenances %}
                     <tr>
                         <td style="font-weight:500">{{ soutenance.dateSoutenance|date('d/m/Y') }}</td>
-                        <td style="color:var(--muted)">{{ soutenance.enseignant }}</td>
+                        <td style="color:var(--muted)">{{ soutenance.etudiant }}</td>
                         <td>
                             {% if soutenance.etat == 'a_venir' %}
                                 <span class="badge badge-avenir"><i class="fas fa-clock" style="margin-right:.3rem"></i>À venir</span>
@@ -54,11 +54,22 @@
                                 <span class="badge badge-default">—</span>
                             {% endif %}
                         </td>
-                        <td>
+                        <td style="min-width:180px">
                             {% if soutenance.etat == 'notee' %}
                                 <span class="badge badge-notee" style="font-size:.78rem;padding:.25rem .65rem">
                                     {{ soutenance.note }}/20
                                 </span>
+                            {% elseif soutenance.etat == 'passee' %}
+                               <form method="POST" action="{{ path('noter_etudiant', {id: soutenance.id}) }}" style="display:flex;flex-direction:row;gap:.4rem;align-items:center">
+    <input type="hidden" name="_token" value="{{ csrf_token('noter') }}">
+    <input type="number" name="note" min="0" max="20" step="0.25" required
+           placeholder="0-20"
+           style="width:65px;padding:.25rem .4rem;border:1px solid var(--border);border-radius:6px;font-size:.85rem">
+    <button type="submit"
+            style="padding:.28rem .7rem;background:#28a745;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.78rem;white-space:nowrap">
+        <i class="fas fa-save" style="margin-right:.3rem"></i>Enregistrer
+    </button>
+</form>
                             {% else %}
                                 <span class="badge badge-default">En attente</span>
                             {% endif %}

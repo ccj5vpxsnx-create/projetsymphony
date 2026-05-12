@@ -17,25 +17,18 @@ final class Version20260511145157 extends AbstractMigration
         return '';
     }
 
-    public function up(Schema $schema): void
-    {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE enseignant ADD user_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE enseignant ADD CONSTRAINT FK_81A72FA1A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_81A72FA1A76ED395 ON enseignant (user_id)');
-        $this->addSql('ALTER TABLE etudiant ADD user_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE etudiant ADD CONSTRAINT FK_717E22E3A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_717E22E3A76ED395 ON etudiant (user_id)');
-    }
+  public function up(Schema $schema): void
+{
+    // Colonnes déjà existantes en base, migration vidée pour éviter les conflits
+}
 
-    public function down(Schema $schema): void
-    {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE enseignant DROP FOREIGN KEY FK_81A72FA1A76ED395');
-        $this->addSql('DROP INDEX UNIQ_81A72FA1A76ED395 ON enseignant');
-        $this->addSql('ALTER TABLE enseignant DROP user_id');
-        $this->addSql('ALTER TABLE etudiant DROP FOREIGN KEY FK_717E22E3A76ED395');
-        $this->addSql('DROP INDEX UNIQ_717E22E3A76ED395 ON etudiant');
-        $this->addSql('ALTER TABLE etudiant DROP user_id');
-    }
+public function down(Schema $schema): void
+{
+    $this->addSql('ALTER TABLE enseignant DROP FOREIGN KEY FK_81A72FA1A76ED395');
+    $this->addSql('DROP INDEX UNIQ_81A72FA1A76ED395 ON enseignant');
+    $this->addSql('ALTER TABLE enseignant DROP user_id');
+    $this->addSql('ALTER TABLE etudiant DROP FOREIGN KEY FK_717E22E3A76ED395');
+    $this->addSql('DROP INDEX UNIQ_717E22E3A76ED395 ON etudiant');
+    $this->addSql('ALTER TABLE etudiant DROP user_id');
+}
 }
